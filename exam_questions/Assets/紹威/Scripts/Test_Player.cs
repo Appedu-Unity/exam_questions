@@ -14,9 +14,15 @@ public class Test_Player : MonoBehaviour
     float pa;                   //玩家與傳送門A距離差
     float pb;                   //玩家與傳送門B距離差
 
-    public GameObject _1;       
+
+    public AudioClip sendaud;
+    public AudioClip walldaud;
+    public AudioClip hitdaud;
+
+    public GameObject _1;
     public GameObject _2;
 
+    private AudioSource aud;
     private Rigidbody2D rig;
     bool mouseTouchPlayer;      // 是否點擊玩家
     public float timer = 2;
@@ -24,6 +30,7 @@ public class Test_Player : MonoBehaviour
     public float HoleCD = 5;
     public bool ismoveing;
     float Holetimer;
+    public GameObject final;
 
     Vector3 mousePos;
     Vector3 temp;
@@ -32,6 +39,7 @@ public class Test_Player : MonoBehaviour
     #region - MonoBehaviour -
     private void Awake()
     {
+        aud = GetComponent<AudioSource>();
         rig = GetComponent<Rigidbody2D>();
     }
     void Start()
@@ -64,8 +72,11 @@ public class Test_Player : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
-        if (collision.gameObject.tag == "傳送們")
+        if (collision.gameObject.tag == "Win")
+        {
+            final.SetActive(true);
+        }
+            if (collision.gameObject.tag == "傳送們")
         {
             pa = Vector3.Distance(transform.position, a.position);
             pb = Vector3.Distance(transform.position, b.position);
@@ -73,6 +84,7 @@ public class Test_Player : MonoBehaviour
 
             if (pa <= pb && Time.time >= Holetimer)
             {
+                aud.PlayOneShot(sendaud);
                 isHole = true;
                 transform.position = b.position;
                 //現在的時間加上冷卻時間
@@ -101,6 +113,7 @@ public class Test_Player : MonoBehaviour
     {
         if (col.gameObject.tag == "Walls")
         {
+            aud.PlayOneShot(walldaud);
             ismoveing = false;
             state = State.idle;
             //print("hi");
@@ -114,10 +127,12 @@ public class Test_Player : MonoBehaviour
         {
             if (col.gameObject.name == "2")
             {
+                aud.PlayOneShot(hitdaud);
                 GoUP(5000);
             }
             else if (col.gameObject.name == "1")
             {
+                aud.PlayOneShot(hitdaud);
                 GoRight(5000);
             }
         }
@@ -137,7 +152,7 @@ public class Test_Player : MonoBehaviour
     {
         MinX = -7.5f;
         MaxX = 7.5f;
-        MinY = -4.3f;
+        MinY = -5.3f;
         MaxY = 4.2f;
 
         state = State.idle;

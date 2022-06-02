@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class diamond : MonoBehaviour
 {
-    public GameManager gm;
+    public AudioClip eataud;
+    private AudioSource aud;
+    private GameManager gm;
+    private void Awake()
+    {
+        aud = GetComponent<AudioSource>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +27,7 @@ public class diamond : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Player"))
         {
+            aud.PlayOneShot(eataud);
             gm.OpenDoor();
             Destroy(gameObject);
         }
