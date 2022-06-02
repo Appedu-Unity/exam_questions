@@ -14,6 +14,9 @@ public class Test_Player : MonoBehaviour
     float pa;
     float pb;
 
+    public GameObject _1;
+    public GameObject _2;
+
     private Rigidbody2D rig;
     bool mouseTouchPlayer;      // 是否點擊玩家
     public float timer = 2;
@@ -109,19 +112,13 @@ public class Test_Player : MonoBehaviour
         }
         if (col.gameObject.tag == "反射")
         {
-            if (transform.position.x > col.transform.position.x)
+            if (col.gameObject.name == "2")
             {
-                if (transform.position.y == col.transform.position.y)
-                {
-                    rig.AddForce(Vector2.up * movespeed * Time.deltaTime * 10, ForceMode2D.Impulse);
-                }
+                GoUP();
             }
-            else if (transform.position.y > col.transform.position.y)
+            else if (col.gameObject.name == "1")
             {
-                if (transform.position.x == col.transform.position.x)
-                {
-                    rig.AddForce(Vector2.right * movespeed * Time.deltaTime * 10, ForceMode2D.Impulse);
-                }
+                rig.AddForce(Vector2.right * movespeed * 5000, ForceMode2D.Impulse);
             }
         }
     }
@@ -192,16 +189,18 @@ public class Test_Player : MonoBehaviour
                     //transform.Translate(0.2f, transform.position.y, transform.position.z);
                     break;
                 case State.idle:
-
                     break;
             }
-
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, MinX, MaxX), Mathf.Clamp(transform.position.y, MinY, MaxY), 0);
         }
     }
     #endregion
-}
 
+    public void GoUP(float x = 1)
+    {
+        rig.AddForce(Vector2.up * movespeed * Time.deltaTime * x, ForceMode2D.Impulse);
+    }
+}
 public enum State
 {
     up, down, left, right, idle
