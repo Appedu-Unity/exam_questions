@@ -6,6 +6,10 @@ TagManager:
   tags:
   - "\u7246\u58C1"
   - Walls
+  - "\u78DA\u584A"
+  - "\u50B3\u9001\u5011"
+  - BGM
+  - "\u53CD\u5C04"
   layers:
   - Default
   - TransparentFX
