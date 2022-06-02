@@ -7,14 +7,14 @@ public class Test_Player : MonoBehaviour
 
     float MinX, MaxX;           // X軸邊界
     float MinY, MaxY;           // Y軸邊界
-    public float movespeed;
+    public float movespeed;     //移動速度
 
-    public Transform a;
-    public Transform b;
-    float pa;
-    float pb;
+    public Transform a;         //傳送門A
+    public Transform b;         //傳送門A   
+    float pa;                   //玩家與傳送門A距離差
+    float pb;                   //玩家與傳送門B距離差
 
-    public GameObject _1;
+    public GameObject _1;       
     public GameObject _2;
 
     private Rigidbody2D rig;
@@ -114,11 +114,11 @@ public class Test_Player : MonoBehaviour
         {
             if (col.gameObject.name == "2")
             {
-                GoUP();
+                GoUP(5000);
             }
             else if (col.gameObject.name == "1")
             {
-                rig.AddForce(Vector2.right * movespeed * 5000, ForceMode2D.Impulse);
+                GoRight(5000);
             }
         }
     }
@@ -195,11 +195,30 @@ public class Test_Player : MonoBehaviour
         }
     }
     #endregion
-
+    #region 往上力道
     public void GoUP(float x = 1)
     {
         rig.AddForce(Vector2.up * movespeed * Time.deltaTime * x, ForceMode2D.Impulse);
     }
+    #endregion
+    #region 往下力道
+    public void GoDown(float x = 1)
+    {
+        rig.AddForce(Vector2.down * movespeed * Time.deltaTime, ForceMode2D.Impulse);
+    }
+    #endregion
+    #region 往左力道
+    public void GoLeft(float x = 1)
+    {
+        rig.AddForce(Vector2.left * movespeed * Time.deltaTime, ForceMode2D.Impulse);
+    }
+    #endregion
+    #region 往右力道
+    public void GoRight(float x = 1)
+    {
+        rig.AddForce(Vector2.right * movespeed * Time.deltaTime, ForceMode2D.Impulse);
+    }
+    #endregion
 }
 public enum State
 {
