@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - "\u78DA\u584A"
   - "\u7246\u58C1"
+  - Walls
   layers:
   - Default
   - TransparentFX
@@ -13,6 +13,8 @@ TagManager:
   - 
   - Water
   - UI
+  - Walls
+  - Items
   - 
   - 
   - 
@@ -20,10 +22,8 @@ TagManager:
   - 
   - 
   - 
-  - "\u78DA\u584A"
-  - "\u73A9\u5BB6"
-  - Item
-  - TriggerBox
+  - 
+  - 
   - 
   - 
   - 
