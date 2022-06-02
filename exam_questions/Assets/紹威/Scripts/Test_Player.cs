@@ -6,7 +6,7 @@ public class Test_Player : MonoBehaviour
     [SerializeField] [Header("角色狀態")] State state;
 
     float MinX, MaxX;           // X軸邊界
-    float MinY, MaxY;           // Y軸邊界
+    public float MinY, MaxY;           // Y軸邊界
     public float movespeed;
 
     public Transform a;
@@ -17,10 +17,11 @@ public class Test_Player : MonoBehaviour
     public GameObject _1;
     public GameObject _2;
 
-    private Rigidbody2D rig;
+    Rigidbody2D rig;
+    AudioSource aud;
+    public AudioClip clip;
+
     bool mouseTouchPlayer;      // 是否點擊玩家
-    public float timer = 2;
-    bool isHole;
     public float HoleCD = 5;
     public bool ismoveing;
     float Holetimer;
@@ -30,10 +31,12 @@ public class Test_Player : MonoBehaviour
     #endregion
 
     #region - MonoBehaviour -
-    private void Awake()
+    void Awake()
     {
         rig = GetComponent<Rigidbody2D>();
+        aud = GetComponent<AudioSource>();
     }
+
     void Start()
     {
         Initialize();
@@ -41,16 +44,12 @@ public class Test_Player : MonoBehaviour
 
     void Update()
     {
-        print(Holetimer);
-        //print(rig.velocity);
-        if (rig.velocity == Vector2.zero)
-            ismoveing = false;
+        if (rig.velocity == Vector2.zero) ismoveing = false;
     }
-    private void FixedUpdate()
+
+    void FixedUpdate()
     {
-        timer++;
-        if (timer > 10)
-            Movement();
+        Movement();
     }
 
     void OnMouseDown()
@@ -62,37 +61,23 @@ public class Test_Player : MonoBehaviour
     {
         mouseTouchPlayer = false;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
         if (collision.gameObject.tag == "傳送們")
         {
             pa = Vector3.Distance(transform.position, a.position);
             pb = Vector3.Distance(transform.position, b.position);
 
-
-            if (pa <= pb && Time.time >= Holetimer)
+            if (pa <= pb && Holetimer > 2f)
             {
-                isHole = true;
                 transform.position = b.position;
-                //現在的時間加上冷卻時間
-                Holetimer = Time.time + HoleCD;
+                Holetimer = 0;
             }
-            else
+            else if (pa >= pb && Holetimer > 2f)
             {
-                isHole = false;
-            }
-
-            if (pa >= pb && Time.time >= Holetimer)
-            {
-                isHole = false;
                 transform.position = a.position;
-                //現在的時間加上冷卻時間
-                Holetimer = Time.time + HoleCD;
-            }
-            else
-            {
-                isHole = true;
+                Holetimer = 0;
             }
         }
     }
@@ -101,10 +86,8 @@ public class Test_Player : MonoBehaviour
     {
         if (col.gameObject.tag == "Walls")
         {
-            ismoveing = false;
+            rig.velocity = Vector2.zero;
             state = State.idle;
-            //print("hi");
-            //Debug.Log("hi");
         }
         if (col.gameObject.tag == "牆壁")
         {
@@ -114,19 +97,14 @@ public class Test_Player : MonoBehaviour
         {
             if (col.gameObject.name == "2")
             {
-                GoUP();
+                rig.AddForce(Vector2.up * movespeed * Time.deltaTime, ForceMode2D.Impulse);
             }
             else if (col.gameObject.name == "1")
             {
-                rig.AddForce(Vector2.right * movespeed * 5000, ForceMode2D.Impulse);
+                rig.AddForce(Vector2.right * movespeed * Time.deltaTime, ForceMode2D.Impulse);
             }
         }
     }
-
-    /*void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.layer == 7) Destroy(collision.gameObject);
-    }*/
     #endregion
 
     #region - Methods -
@@ -151,9 +129,8 @@ public class Test_Player : MonoBehaviour
     {
         if (!ismoveing)
         {
-
-
             state = State.idle;
+
             if (state == State.idle)
             {
                 temp = transform.position;
@@ -192,6 +169,8 @@ public class Test_Player : MonoBehaviour
                     break;
             }
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, MinX, MaxX), Mathf.Clamp(transform.position.y, MinY, MaxY), 0);
+
+            aud.PlayOneShot(clip);
         }
     }
     #endregion

@@ -5,7 +5,7 @@ using UnityEngine;
 public class diamond : MonoBehaviour
 {
     public GameManager gm;
-    // Start is called before the first frame update
+
     void Start()
     {
         gm=GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -18,7 +18,6 @@ public class diamond : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.gameObject.CompareTag("Player"))
         {
             gm.OpenDoor();
